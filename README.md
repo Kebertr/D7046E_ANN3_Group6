@@ -114,3 +114,17 @@ Your project submission should include:
 - Performance comparison plots (accuracy vs. noise level for both models)
 - Confusion matrices for at least the 0%, 10% and 50% noise conditions
 - Discussion of results and conclusions
+
+## Desciption for getting background noise
+Go to github repository `https://github.com/karolpiczak/ESC-50`
+
+Download it, take out directory audio and change name of it to noise_audio. Then run the file. Dataset size should be
+
+```
+Dataset size: 1400
+Dataset size: 300
+Dataset size: 300
+Dataset size: 51088
+Dataset size: 6798
+Dataset size: 6835
+```
