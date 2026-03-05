@@ -1,0 +1,4 @@
+SpeechCommands/
+noise_audio/
+best_model.pt
+speech_commands_v0.01.tar.gz
