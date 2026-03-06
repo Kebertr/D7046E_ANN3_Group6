@@ -1,0 +1,9 @@
+# Ignore everything in this repository
+*
+
+# Keep this ignore file itself
+!.gitignore
+
+# Keep the project notebook and README
+!ANN_Project_Group6.ipynb
+!README.md
