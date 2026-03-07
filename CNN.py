@@ -1,5 +1,4 @@
 import random
-
 from matplotlib import pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 import torch
@@ -14,6 +13,7 @@ from torchaudio.transforms import Resample
 import torchaudio
 # Running with gpu otherwise it takes ages
 gpu = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Backends:", torchaudio.list_audio_backends())
 # To enable confusion matrix to render and then continue
 plt.ion()
 # Our model
@@ -46,6 +46,7 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, num_epoch
     min_LSTM_loss = 10
     
     model.train()
+    # Convert the raw audio waves to a spectogram, easier for CNN to read
     melspectogram = torchaudio.transforms.MelSpectrogram(sample_rate=16000,n_fft=1024,hop_length=512,n_mels=64).to(gpu)
 
     for i in range(num_epochs):
@@ -59,6 +60,7 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, num_epoch
             waveform = waveform.to(gpu)
             targets = targets.to(gpu)
 
+            #Waveform is the raw audiio input, the waves
             mel2D = melspectogram(waveform)
 
             mel2D = torch.log(mel2D + 1e-9)
@@ -70,8 +72,6 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, num_epoch
             loss.backward()
 
             optimizer.step()
-
-            
 
             guess = torch.argmax(prediction, dim=-1)
             for i in range(len(targets)):
@@ -91,6 +91,7 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, num_epoch
                 
                 mel2D = melspectogram(waveform)
 
+                # It has easier way to read with logaritmic scale
                 mel2D = torch.log(mel2D + 1e-9)
                 
                 # Forward pass
@@ -98,8 +99,6 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, num_epoch
                 loss = criterion(prediction, targets)
                 epoch_validation_loss += loss.item()
             
-                
-
                 guess = torch.argmax(prediction, dim=-1)
                 for i in range(len(targets)):
                     if guess[i].item() == targets[i].item():
